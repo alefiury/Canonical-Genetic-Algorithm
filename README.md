@@ -1,1 +1,1 @@
-# Canonical-Genetic-Algorithm
+# Canonical Genetic Algorithm - TSIA - 2022

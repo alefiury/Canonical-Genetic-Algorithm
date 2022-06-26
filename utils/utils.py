@@ -40,30 +40,3 @@ def fitness_function(vars):
     x = vars[0]
     y = vars[1]
     return 0.5 - (math.sin(math.sqrt(x**2 + y**2))**2 - 0.5) / (1.0 + 0.001*(x**2 + y**2))**2
-
-def fitness_function_test(x, y):
-    return 0.5 - ((math.sin(math.sqrt(x**2 + y**2)**2) - 0.5) / ((1.0 + (0.001*(x**2 + y**2)))**2))
-
-
-def plot_graph(fitness_function):
-    x = np.linspace(-100, 100, 200)
-    y = np.linspace(-100, 100, 200)
-    z = []
-    Z = []
-
-    X, Y = np.meshgrid(x, y)
-
-    for i, j in zip(X, Y):
-        z = []
-        for k, m in zip(i, j):
-            z.append(fitness_function_test(k, m))
-        Z.append(z)
-
-    fig = plt.figure()
-    ax = plt.axes(projection='3d')
-    ax.contour3D(X, Y, Z, 50, cmap='binary')
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
-    plt.show()
-
