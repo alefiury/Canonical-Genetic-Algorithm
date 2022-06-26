@@ -1,9 +1,13 @@
-import os
-import math
-from typing import Callable, Optional
-from dataclasses import dataclass
+import logging
+from typing import Callable
 
 import numpy as np
+
+from utils.utils import formatter_single
+
+# Logger
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format=formatter_single.FORMATTER)
 
 class GeneticAlgorithm:
     def __init__(
@@ -120,7 +124,7 @@ class GeneticAlgorithm:
             bit2real = lambda bits: int(bits, 2)*((self.max_value - self.min_value)/(2**self.num_bits_per_feature - 1)) + self.min_value
             best_x = bit2real(self.individuals[idx_best_fitness][0])
             best_y = bit2real(self.individuals[idx_best_fitness][1])
-            print(f"Generation: {gen+1}/{self.num_generations} | Avg Fitness: {np.mean(fitness)} | Best Fitness: {np.max(fitness)} | Best individual: ({best_x}, {best_y})")
+            log.info(f"Generation: {gen+1}/{self.num_generations} | Avg Fitness: {np.mean(fitness)} | Best Fitness: {np.max(fitness)} | Best individual: ({best_x}, {best_y})")
             selected_individuals = []
             offsprings = []
             mutated_offsprings = []

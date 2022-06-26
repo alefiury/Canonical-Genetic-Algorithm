@@ -1,8 +1,6 @@
-import os
 import logging
 import argparse
 
-import numpy as np
 from omegaconf import OmegaConf
 
 from utils.utils import formatter_single
