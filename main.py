@@ -3,9 +3,9 @@ import argparse
 from omegaconf import OmegaConf
 
 from utils.genetic_algorithm import GeneticAlgorithm
-from utils.utils import fitness_function, plot_graph, fitness_function_test
+from utils.utils import fitness_function
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-c',
@@ -18,15 +18,12 @@ def main():
 
     cfg = OmegaConf.load(args.config_path)
 
-    ag = GeneticAlgorithm(
+    ga = GeneticAlgorithm(
         **cfg.genetic_algorithm,
         fitness_function=fitness_function
     )
 
-    # ag.iterate()
-
-    plot_graph(fitness_function_test)
-
+    ga.iterate()
 
 if __name__ == '__main__':
     main()

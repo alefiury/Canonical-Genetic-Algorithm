@@ -1,5 +1,5 @@
 import logging
-from typing import Callable
+from typing import Callable, List
 
 import numpy as np
 
@@ -13,15 +13,15 @@ class GeneticAlgorithm:
     def __init__(
         self,
         fitness_function: Callable,
-        num_generations: int = 100,
+        num_generations: int = 40,
         population_size: int = 100,
         num_features: int = 2,
         num_bits_per_feature: int = 22,
-        min_value: int = -100,
-        max_value: int = 100,
+        min_value: float = -100,
+        max_value: float = 100,
         crossover_rate: float = 0.65,
         mutation_rate: float = 0.008,
-        population_generation_seed: int = 42
+        round_decimals: int = 6
     ):
 
         self.num_generations = num_generations
@@ -30,13 +30,13 @@ class GeneticAlgorithm:
         self.num_bits_per_feature = num_bits_per_feature
         self.min_value = min_value
         self.max_value = max_value
-        self.population_generation_seed = population_generation_seed
         self.fitness_function = fitness_function
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
+        self.round_decimals = round_decimals
 
 
-    def init_individuals(self):
+    def init_individuals(self) -> None:
         """
         Creates an initial population based on a discrete uniform distribution
         considering all the range of possible integer values of a bit representation,
@@ -50,7 +50,7 @@ class GeneticAlgorithm:
         self.individuals = self.individuals.reshape(self.population_size, self.num_features)
 
 
-    def convert_bit2real(self):
+    def convert_bit2real(self) -> List[float]:
         """
         Converts a bit string in its real representation
         """
@@ -60,7 +60,7 @@ class GeneticAlgorithm:
         return real_individuals
 
 
-    def calculate_fitness(self):
+    def calculate_fitness(self) -> List[float]:
         """
         Calculate fitness based on a specific function
         """
@@ -70,7 +70,7 @@ class GeneticAlgorithm:
         return fitness
 
 
-    def crossover(self, individual1, individual2):
+    def crossover(self, individual1: List[str], individual2: List[str]) -> List[str]:
         """
         Performs the crossover operation onto 2 individuals
         """
@@ -83,7 +83,7 @@ class GeneticAlgorithm:
         return np.array([offspring[self.num_bits_per_feature:], offspring[:self.num_bits_per_feature]])
 
 
-    def mutation(self, individual, mutation_rate):
+    def mutation(self, individual: List[str], mutation_rate: float) -> List[str]:
         """
         Invert a bit based on a certain probability
         """
@@ -107,7 +107,7 @@ class GeneticAlgorithm:
         return np.array([mutated_individual[self.num_bits_per_feature:], mutated_individual[:self.num_bits_per_feature]])
 
 
-    def roulette_wheel_selection(self):
+    def roulette_wheel_selection(self) -> int:
         """
         Selects an individual based on the roulette wheel strategy
         """
@@ -120,7 +120,7 @@ class GeneticAlgorithm:
         return selected_individual
 
 
-    def iterate(self):
+    def iterate(self) -> None:
 
         self.init_individuals()
         fitness = self.calculate_fitness()
@@ -133,7 +133,7 @@ class GeneticAlgorithm:
             best_x = bit2real(self.individuals[idx_best_fitness][0])
             best_y = bit2real(self.individuals[idx_best_fitness][1])
 
-            log.info(f"Generation: {gen+1}/{self.num_generations} | Avg Fitness: {np.mean(fitness)} | Best Fitness: {np.max(fitness)} | Best individual: ({best_x}, {best_y})")
+            log.info(f"Generation: {gen+1}/{self.num_generations} | Avg Fitness: {np.round(np.mean(fitness), self.round_decimals)} | Best Fitness: {np.round(np.max(fitness), self.round_decimals)} | Best individual: ({np.round(best_x, self.round_decimals)}, {np.round(best_y, self.round_decimals)})")
 
             selected_individuals = []
             offsprings = []
