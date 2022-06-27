@@ -10,6 +10,7 @@ from utils.utils import formatter_single, plot_graph
 # Logger
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format=formatter_single.FORMATTER)
+np.random.seed(1024)
 
 class GeneticAlgorithm:
     def __init__(

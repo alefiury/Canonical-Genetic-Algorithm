@@ -3,7 +3,7 @@ import argparse
 from omegaconf import OmegaConf
 
 from utils.genetic_algorithm import GeneticAlgorithm
-from utils.utils import fitness_function, plot_graph
+from utils.utils import fitness_function
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -24,7 +24,6 @@ def main() -> None:
     )
 
     ga.iterate()
-    # plot_graph()
 
 if __name__ == '__main__':
     main()
