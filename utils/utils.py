@@ -40,3 +40,25 @@ def fitness_function(vars):
     x = vars[0]
     y = vars[1]
     return 0.5 - (math.sin(math.sqrt(x**2 + y**2))**2 - 0.5) / (1.0 + 0.001*(x**2 + y**2))**2
+
+
+def plot_graph(indivividuals):
+    figure, ax = plt.subplots(figsize=(10, 8))
+    plt.ion()
+    x = indivividuals[:, 0]
+    y = indivividuals[:, 1]
+    # plotting the points
+    plt.scatter(x, y)
+    # plot1.set_xdata(x)
+    # plot1.set_ydata(update_y_value)
+
+    # naming the x axis
+    plt.xlabel('x - axis')
+    # naming the y axis
+    plt.ylabel('y - axis')
+
+    # giving a title to my graph
+    plt.title('My first graph!')
+
+    # function to show the plot
+    plt.show()

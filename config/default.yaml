@@ -1,5 +1,5 @@
 genetic_algorithm:
-    num_generations: 100
+    num_generations: 200
     population_size: 100
     num_features: 2
     num_bits_per_feature: 22
@@ -8,3 +8,4 @@ genetic_algorithm:
     crossover_rate: 0.65
     mutation_rate: 0.008
     round_decimals: 6
+    plot_individuals: true

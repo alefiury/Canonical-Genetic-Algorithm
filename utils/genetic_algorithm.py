@@ -1,9 +1,11 @@
+import time
 import logging
 from typing import Callable, List
+import matplotlib.pyplot as plt
 
 import numpy as np
 
-from utils.utils import formatter_single
+from utils.utils import formatter_single, plot_graph
 
 # Logger
 log = logging.getLogger(__name__)
@@ -21,7 +23,8 @@ class GeneticAlgorithm:
         max_value: float = 100,
         crossover_rate: float = 0.65,
         mutation_rate: float = 0.008,
-        round_decimals: int = 6
+        round_decimals: int = 6,
+        plot_individuals: bool = False
     ):
 
         self.num_generations = num_generations
@@ -34,6 +37,7 @@ class GeneticAlgorithm:
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.round_decimals = round_decimals
+        self.plot_individuals = plot_individuals
 
 
     def init_individuals(self) -> None:
@@ -125,13 +129,32 @@ class GeneticAlgorithm:
         self.init_individuals()
         fitness = self.calculate_fitness()
 
-        for gen in range(self.num_generations):
-            idx_best_fitness = np.argmax(fitness)
+        if self.plot_individuals:
+            figure, ax = plt.subplots(figsize=(8, 6))
+            plt.ion()
 
+        for gen in range(self.num_generations):
             # Gets best individual in its real representation (x, y)
             bit2real = lambda bits: int(bits, 2)*((self.max_value - self.min_value)/(2**self.num_bits_per_feature - 1)) + self.min_value
+            idx_best_fitness = np.argmax(fitness)
             best_x = bit2real(self.individuals[idx_best_fitness][0])
             best_y = bit2real(self.individuals[idx_best_fitness][1])
+
+            if self.plot_individuals:
+                x = self.convert_bit2real()[:, 0]
+                y = self.convert_bit2real()[:, 1]
+
+                plt.title(f"Generation: {gen} - Best Fitness: {np.round(np.max(fitness), self.round_decimals)} - Best individual: ({np.round(best_x, self.round_decimals)}, {np.round(best_y, self.round_decimals)})")
+                # plt.title("made in Python", loc='center', fontsize=13, color='grey', style='italic', y=-0.01)
+                plt.xlim(self.min_value, self.max_value)
+                plt.ylim(self.min_value, self.max_value)
+                plt.scatter(x, y)
+
+                figure.canvas.draw()
+                figure.canvas.flush_events()
+                time.sleep(0.1)
+                plt.show()
+                plt.clf()
 
             log.info(f"Generation: {gen+1}/{self.num_generations} | Avg Fitness: {np.round(np.mean(fitness), self.round_decimals)} | Best Fitness: {np.round(np.max(fitness), self.round_decimals)} | Best individual: ({np.round(best_x, self.round_decimals)}, {np.round(best_y, self.round_decimals)})")
 
